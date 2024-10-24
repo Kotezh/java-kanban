@@ -3,15 +3,14 @@ package taskTracker.model;
 import java.util.Objects;
 
 public class Task {
-    private String name;
-    private String description;
-    private int id;
-    private TaskState taskState;
+    protected String name;
+    protected String description;
+    protected int id;
+    protected TaskState taskState;
 
-    public Task(String name, String description, int id, TaskState taskState) {
+    public Task(String name, String description, TaskState taskState) {
         this.name = name;
         this.description = description;
-        this.id = id;
         this.taskState = taskState;
     }
 
@@ -58,5 +57,15 @@ public class Task {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", id=" + id +
+                ", taskState=" + taskState +
+                '}';
     }
 }
