@@ -42,13 +42,23 @@ public class Main {
         System.out.println("\nСмена статусов:");
         addedTask_1.setTaskState(TaskState.IN_PROGRESS);
         Task updatedTask_1 = taskManager.updateTask(addedTask_1);
+        System.out.println(updatedTask_1.getTaskState());
+
         addedTask_2.setTaskState(TaskState.DONE);
+        Task updatedTask_2 = taskManager.updateTask(addedTask_2);
+        System.out.println(updatedTask_2.getTaskState());
+
         addedSubtask_1.setTaskState(TaskState.IN_PROGRESS);
         Subtask updatedSubtask_1 = taskManager.updateSubtask(addedSubtask_1);
+        System.out.println(updatedSubtask_1.getTaskState());
+
         addedSubtask_2.setTaskState(TaskState.DONE);
         Subtask updatedSubtask_2 = taskManager.updateSubtask(addedSubtask_2);
+        System.out.println(updatedSubtask_2.getTaskState());
+
         addedSubtask_3.setTaskState(TaskState.IN_PROGRESS);
         Subtask updatedSubtask_3 = taskManager.updateSubtask(addedSubtask_3);
+        System.out.println(updatedSubtask_3.getTaskState());
 
         System.out.println("\n Статусы задач:");
         System.out.println(addedTask_1.getName() + ": " + addedTask_1.getTaskState());
@@ -62,23 +72,24 @@ public class Main {
         System.out.println("\nИзменение задач:");
         addedTask_1.setDescription("Вкусный и успокаивающий");
         updatedTask_1 = taskManager.updateTask(addedTask_1);
-        System.out.println("Задача обновлена: " + updatedTask_1);
+        System.out.println("Задача обновлена: " + updatedTask_1.getDescription());
         addedSubtask_1.setDescription("Купить продукты на неделю");
         updatedSubtask_1 = taskManager.updateSubtask(addedSubtask_1);
-        System.out.println("Подзадача обновлена:" + updatedSubtask_1);
+        System.out.println("Подзадача обновлена: " + updatedSubtask_1.getDescription());
         addedEpic_1.setName("Дом и хобби");
         Epic updatedEpic_1 = taskManager.updateEpic(addedEpic_1);
-        System.out.println("Эпик обновлен:" + updatedEpic_1);
+        System.out.println("Эпик обновлен: " + updatedEpic_1.getName());
 
         System.out.println("\nПоиск подзадач эпика:");
-        ArrayList<Subtask> subtasksByEpic_1 = taskManager.getSubtasksByEpic(addedEpic_1);
+        ArrayList<Subtask> subtasksByEpic_1 = taskManager.getSubtasksByEpic(updatedEpic_1);
         System.out.printf("Подзадачи эпика 1: %s\n", subtasksByEpic_1);
 
         System.out.println("\nУдаление задач по id:");
-        taskManager.removeTask(addedTask_1.getId());
-        System.out.printf("Задача '%s' удалена\n", addedTask_1.getName());
-        taskManager.removeSubtask(addedSubtask_1.getId());
-        System.out.printf("Подзадача '%s' удалена\n", addedSubtask_1.getName());
+        taskManager.removeTask(updatedTask_1.getId());
+        System.out.printf("Задача '%s' удалена\n", updatedTask_1.getName());
+        taskManager.removeSubtask(updatedSubtask_1.getId());
+        System.out.printf("Подзадача '%s' удалена\n", updatedSubtask_1.getName());
+
         taskManager.removeEpic(addedEpic_2.getId());
         System.out.printf("Эпик '%s' удален\n", addedEpic_2.getName());
 

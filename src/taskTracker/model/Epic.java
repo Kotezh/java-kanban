@@ -10,7 +10,7 @@ public class Epic extends Task {
     }
 
     public ArrayList<Subtask> getSubtasks() {
-        return subtasks;
+        return this.subtasks;
     }
 
     public void setSubtasks(ArrayList<Subtask> subtasks) {
@@ -18,6 +18,18 @@ public class Epic extends Task {
     }
 
     public void addSubtask(Subtask subtask) {
-        subtasks.add(subtask);
+        if (!this.subtasks.isEmpty()) {
+            for (int i = 0; i < this.subtasks.size(); i++) {
+                Subtask currentSubtask = this.subtasks.get(i);
+                if (subtask.id == currentSubtask.getId()) {
+                    this.subtasks.remove(currentSubtask);
+                }
+            }
+        }
+        this.subtasks.add(subtask);
+    }
+
+    public void removeSubtask(Subtask subtask) {
+        this.subtasks.remove(subtask);
     }
 }

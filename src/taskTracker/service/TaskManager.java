@@ -6,10 +6,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class TaskManager {
-    protected int idCounter = 0;
-    protected HashMap<Integer, Task> tasks = new HashMap<Integer, Task>();
-    protected HashMap<Integer, Subtask> subtasks = new HashMap<Integer, Subtask>();
-    protected HashMap<Integer, Epic> epics = new HashMap<Integer, Epic>();
+    protected int idCounter;
+    private HashMap<Integer, Task> tasks = new HashMap<Integer, Task>();
+    private HashMap<Integer, Subtask> subtasks = new HashMap<Integer, Subtask>();
+    private HashMap<Integer, Epic> epics = new HashMap<Integer, Epic>();
 
     private int getCurrentId() {
         return ++idCounter;
@@ -54,6 +54,9 @@ public class TaskManager {
             Subtask subtask = getSubtaskById(id);
             if (subtask != null) {
                 subtasks.remove(id);
+                Epic epic = getEpicById(subtask.getEpicId());
+                epic.removeSubtask(subtask);
+                updateEpicState(epic.getId());
             }
         }
     }
@@ -74,6 +77,13 @@ public class TaskManager {
     }
 
     public void removeAllSubtasks() {
+        for (Subtask subtask : subtasks.values()) {
+            int epicId = subtask.getEpicId();
+            Epic epic = getEpicById(epicId);
+            ArrayList<Subtask> epicSubtasks = epic.getSubtasks();
+            epicSubtasks.clear();
+            updateEpicState(epicId);
+        }
         subtasks.clear();
     }
 
