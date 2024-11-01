@@ -32,4 +32,9 @@ public class Epic extends Task {
     public void removeSubtask(Subtask subtask) {
         this.subtasks.remove(subtask);
     }
+
+    @Override
+    public TaskType getTaskType() {
+        return TaskType.EPIC;
+    }
 }

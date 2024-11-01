@@ -2,7 +2,7 @@ import taskTracker.model.Epic;
 import taskTracker.model.Subtask;
 import taskTracker.model.Task;
 import taskTracker.model.TaskState;
-import taskTracker.service.TaskManager;
+import taskTracker.service.InMemoryTaskManager;
 
 import java.util.ArrayList;
 
@@ -10,7 +10,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        TaskManager taskManager = new TaskManager();
+        InMemoryTaskManager taskManager = new InMemoryTaskManager();
 
         Task task_1 = new Task("Купить чай", "Вкусный", TaskState.NEW);
         Task addedTask_1 = taskManager.createNewTask(task_1);
