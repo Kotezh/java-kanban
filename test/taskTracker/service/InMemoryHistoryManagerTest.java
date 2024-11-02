@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import taskTracker.model.Task;
 import taskTracker.model.TaskState;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -21,7 +20,6 @@ class InMemoryHistoryManagerTest {
         Task task_2 = new Task("Посмотреть вебинар", "Запись эфира на capoeiraskills", TaskState.NEW);
         Task addedTask_2 = taskManager.createNewTask(task_2);
         Task touchedTask_2 = taskManager.getTaskById(addedTask_2.getId());
-
     }
 
     //  убедитесь, что задачи, добавляемые в HistoryManager, сохраняют предыдущую версию задачи и её данных.
@@ -33,7 +31,7 @@ class InMemoryHistoryManagerTest {
     }
 
     @Test
-    void shouldBeGetHistory() {
+    void shouldGetHistory() {
         final List<Task> history = taskManager.getHistory();
         assertNotNull(history, "История не пустая.");
         assertEquals(2, history.size(), "История не пустая.");

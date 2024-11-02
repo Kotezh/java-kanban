@@ -14,7 +14,7 @@ class ManagersTest {
 
     @Test
     void shouldBeInMemoryTaskManagerCreated() {
-        InMemoryTaskManager taskManager = Managers.getDefault();
+        TaskManager taskManager = Managers.getDefault();
         assertNotNull(taskManager);
     }
 }
