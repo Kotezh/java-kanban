@@ -13,7 +13,6 @@ public class InMemoryTaskManager implements TaskManager {
     private HashMap<Integer, Epic> epics = new HashMap<Integer, Epic>();
     private HistoryManager historyManager = Managers.getDefaultHistory();
 
-    @Override
     public int getCurrentId() {
         return ++idCounter;
     }
@@ -176,7 +175,6 @@ public class InMemoryTaskManager implements TaskManager {
         return null;
     }
 
-    @Override
     public void updateEpicState(int epicId) {
         Epic epic = getEpicById(epicId);
         ArrayList<Subtask> epicSubtasks = epic.getSubtasks();

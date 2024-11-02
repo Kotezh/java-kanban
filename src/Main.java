@@ -38,6 +38,10 @@ public class Main {
         System.out.println("\nСписок подзадач:");
         ArrayList<Subtask> allSubtasks = taskManager.getAllSubtasks();
         System.out.println(allSubtasks);
+        System.out.println("\nИстория:");
+        for (Task task : taskManager.getHistory()) {
+            System.out.println(task);
+        }
 
         System.out.println("\nСмена статусов:");
         addedTask_1.setTaskState(TaskState.IN_PROGRESS);
@@ -95,10 +99,14 @@ public class Main {
 
         System.out.println("\nСписок задач:");
         System.out.println(taskManager.getAllTasks());
-        System.out.println("Список эпиков:");
+        System.out.println("\nСписок эпиков:");
         System.out.println(taskManager.getAllEpics());
-        System.out.println("Список подзадач:");
+        System.out.println("\nСписок подзадач:");
         System.out.println(taskManager.getAllSubtasks());
+        System.out.println("\nИстория:");
+        for (Task task : taskManager.getHistory()) {
+            System.out.println(task);
+        }
 
         System.out.println("\nУдаление всех задач:");
         taskManager.removeAllTasks();

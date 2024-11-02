@@ -8,8 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface TaskManager {
-    int getCurrentId();
-
     Task getTaskById(int id);
 
     Subtask getSubtaskById(int id);
@@ -47,8 +45,6 @@ public interface TaskManager {
     Subtask updateSubtask(Subtask subtask);
 
     Epic updateEpic(Epic epic);
-
-    void updateEpicState(int epicId);
 
     List<Task> getHistory();
 }

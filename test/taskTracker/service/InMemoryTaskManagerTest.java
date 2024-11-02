@@ -181,4 +181,64 @@ class InMemoryTaskManagerTest {
         assertEquals("Купить кофе", updatedEpic.getName());
         assertEquals(TaskState.IN_PROGRESS, epic.getTaskState());
     }
+
+    //    проверьте, что экземпляры класса Task равны друг другу, если равен их id
+    @Test
+    public void shouldBePositiveWhenTasksIdIsEquals() {
+        Task task_1 = new Task("Купить чай", "Вкусный", TaskState.NEW);
+        Task task_2 = new Task("Купить чай", "Вкусный", TaskState.NEW);
+        assertEquals(task_1, task_2);
+    }
+
+    @Test
+    public void shouldBeNegativeWhenTasksIdIsNotEquals() {
+        Task task_1 = new Task("Купить чай", "Вкусный", TaskState.NEW);
+        Task addedTask_1 = taskManager.createNewTask(task_1);
+        Task task_2 = new Task("Посмотреть вебинар", "Запись эфира на capoeiraskills", TaskState.NEW);
+        Task addedTask_2 = taskManager.createNewTask(task_2);
+
+        assertNotEquals(addedTask_1, addedTask_2);
+    }
+
+    // проверьте, что наследники класса Task равны друг другу, если равен их id;
+    @Test
+    public void shouldBeNegativeWhenEpicsIdIsNotEquals() {
+        Epic epic_1 = new Epic("Дом", "Здесь будут задачи по дому", TaskState.NEW);
+        Epic addedEpic_1 = taskManager.createNewEpic(epic_1);
+
+        Epic epic_2 = new Epic("Дом", "Здесь будут задачи по дому", TaskState.NEW);
+        Epic addedEpic_2 = taskManager.createNewEpic(epic_2);
+
+        assertNotEquals(addedEpic_1, addedEpic_2);
+    }
+
+    @Test
+    public void shouldBePositiveWhenEpicsIdIsEquals() {
+        Epic epic_1 = new Epic("Дом", "Здесь будут задачи по дому", TaskState.NEW);
+        Epic epic_2 = new Epic("Дом", "Здесь будут задачи по дому", TaskState.NEW);
+
+        assertEquals(epic_1, epic_2);
+    }
+
+    @Test
+    public void shouldBeNegativeWhenSubtasksIdIsNotEquals() {
+        Epic epic_1 = new Epic("Дом", "Здесь будут задачи по дому", TaskState.NEW);
+        Epic addedEpic_1 = taskManager.createNewEpic(epic_1);
+        Subtask subtask_1 = new Subtask("Купить продукты", "Сделать заказ в Ленте", TaskState.NEW, addedEpic_1.getId());
+        Subtask addedSubtask_1 = taskManager.createNewSubtask(subtask_1);
+        Subtask subtask_2 = new Subtask("Приготовить суши-торт", "решить запеченный или нет", TaskState.NEW, addedEpic_1.getId());
+        Subtask addedSubtask_2 = taskManager.createNewSubtask(subtask_2);
+
+        assertNotEquals(addedSubtask_1, addedSubtask_2);
+    }
+
+    @Test
+    public void shouldBePositiveWhenSubtasksIdIsEquals() {
+        Epic epic_1 = new Epic("Дом", "Здесь будут задачи по дому", TaskState.NEW);
+        Epic addedEpic_1 = taskManager.createNewEpic(epic_1);
+        Subtask subtask_1 = new Subtask("Купить продукты", "Сделать заказ в Ленте", TaskState.NEW, addedEpic_1.getId());
+        Subtask subtask_2 = new Subtask("Приготовить суши-торт", "решить запеченный или нет", TaskState.NEW, addedEpic_1.getId());
+
+        assertEquals(subtask_1, subtask_2);
+    }
 }
