@@ -4,8 +4,13 @@ import taskTracker.model.Task;
 
 import java.util.List;
 
-public interface HistoryManager {
-    void add(Task task);
 
-    List<Task> getHistory();
+public interface HistoryManager<T extends Task> {
+//    void add(Task task);
+
+    void add(T task);
+
+    void remove(int id);
+
+    List<T> getHistory();
 }
