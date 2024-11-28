@@ -179,7 +179,7 @@ class InMemoryTaskManagerTest {
         Task updatedEpic = taskManager.updateEpic(epic);
         assertEquals("Купить кофе", taskManager.getEpicById(3).getName());
         assertEquals("Купить кофе", updatedEpic.getName());
-        assertEquals(TaskState.INPROGRESS, epic.getTaskState());
+        assertEquals(TaskState.IN_PROGRESS, epic.getTaskState());
     }
 
     //    проверьте, что экземпляры класса Task равны друг другу, если равен их id

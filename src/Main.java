@@ -44,7 +44,7 @@ public class Main {
         }
 
         System.out.println("\nСмена статусов:");
-        addedTask1.setTaskState(TaskState.INPROGRESS);
+        addedTask1.setTaskState(TaskState.IN_PROGRESS);
         Task updatedTask1 = taskManager.updateTask(addedTask1);
         System.out.println(updatedTask1.getTaskState());
 
@@ -52,7 +52,7 @@ public class Main {
         Task updatedTask2 = taskManager.updateTask(addedTask2);
         System.out.println(updatedTask2.getTaskState());
 
-        addedSubtask1.setTaskState(TaskState.INPROGRESS);
+        addedSubtask1.setTaskState(TaskState.IN_PROGRESS);
         Subtask updatedSubtask1 = taskManager.updateSubtask(addedSubtask1);
         System.out.println(updatedSubtask1.getTaskState());
 
@@ -60,7 +60,7 @@ public class Main {
         Subtask updatedSubtask2 = taskManager.updateSubtask(addedSubtask2);
         System.out.println(updatedSubtask2.getTaskState());
 
-        addedSubtask3.setTaskState(TaskState.INPROGRESS);
+        addedSubtask3.setTaskState(TaskState.IN_PROGRESS);
         Subtask updatedSubtask3 = taskManager.updateSubtask(addedSubtask3);
         System.out.println(updatedSubtask3.getTaskState());
 
