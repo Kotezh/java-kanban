@@ -1,4 +1,4 @@
-package taskTracker.service;
+package tasktracker.service;
 
 public class Managers {
     public static HistoryManager getDefaultHistory() {

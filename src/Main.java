@@ -1,8 +1,8 @@
-import taskTracker.model.Epic;
-import taskTracker.model.Subtask;
-import taskTracker.model.Task;
-import taskTracker.model.TaskState;
-import taskTracker.service.InMemoryTaskManager;
+import tasktracker.model.Epic;
+import tasktracker.model.Subtask;
+import tasktracker.model.Task;
+import tasktracker.model.TaskState;
+import tasktracker.service.InMemoryTaskManager;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package taskTracker.model;
+package tasktracker.model;
 
 public enum TaskState {
     NEW,

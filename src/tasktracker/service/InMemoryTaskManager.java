@@ -1,6 +1,6 @@
-package taskTracker.service;
+package tasktracker.service;
 
-import taskTracker.model.*;
+import tasktracker.model.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;

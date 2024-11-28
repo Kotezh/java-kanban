@@ -1,9 +1,9 @@
-package taskTracker.service;
+package tasktracker.service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import taskTracker.model.Task;
-import taskTracker.model.TaskState;
+import tasktracker.model.Task;
+import tasktracker.model.TaskState;
 
 import java.util.List;
 
