@@ -16,15 +16,15 @@ class InMemoryHistoryManagerTest {
 
     @BeforeEach
     void beforeEach() {
-        Task task_1 = new Task("Купить чай", "Вкусный", TaskState.NEW);
-        Task addedTask_1 = taskManager.createNewTask(task_1);
-        Task touchedTask_1 = taskManager.getTaskById(addedTask_1.getId());
-        Task task_2 = new Task("Посмотреть вебинар", "Запись эфира на capoeiraskills", TaskState.NEW);
-        Task addedTask_2 = taskManager.createNewTask(task_2);
-        Task touchedTask_2 = taskManager.getTaskById(addedTask_2.getId());
-        Task task_3 = new Task("Сдать задание", "Успеть вовремя", TaskState.NEW);
-        Task addedTask_3 = taskManager.createNewTask(task_3);
-        Task touchedTask_3 = taskManager.getTaskById(addedTask_3.getId());
+        Task task1 = new Task("Купить чай", "Вкусный", TaskState.NEW);
+        Task addedTask1 = taskManager.createNewTask(task1);
+        Task touchedTask1 = taskManager.getTaskById(addedTask1.getId());
+        Task task2 = new Task("Посмотреть вебинар", "Запись эфира на capoeiraskills", TaskState.NEW);
+        Task addedTask2 = taskManager.createNewTask(task2);
+        Task touchedTask2 = taskManager.getTaskById(addedTask2.getId());
+        Task task3 = new Task("Сдать задание", "Успеть вовремя", TaskState.NEW);
+        Task addedTask3 = taskManager.createNewTask(task3);
+        Task touchedTask3 = taskManager.getTaskById(addedTask3.getId());
     }
 
     //  убедитесь, что задачи, добавляемые в HistoryManager, сохраняют предыдущую версию задачи и её данных.
