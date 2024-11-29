@@ -1,8 +1,8 @@
-package taskTracker.service;
+package tasktracker.service;
 
-import taskTracker.model.Epic;
-import taskTracker.model.Subtask;
-import taskTracker.model.Task;
+import tasktracker.model.Epic;
+import tasktracker.model.Subtask;
+import tasktracker.model.Task;
 
 import java.util.ArrayList;
 import java.util.List;

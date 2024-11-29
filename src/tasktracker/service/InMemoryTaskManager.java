@@ -1,6 +1,6 @@
-package taskTracker.service;
+package tasktracker.service;
 
-import taskTracker.model.*;
+import tasktracker.model.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -64,6 +64,7 @@ public class InMemoryTaskManager implements TaskManager {
     public void removeTask(int id) {
         if (tasks.containsKey(id)) {
             tasks.remove(id);
+            historyManager.remove(id);
         }
     }
 
@@ -73,6 +74,7 @@ public class InMemoryTaskManager implements TaskManager {
             Subtask subtask = getSubtaskById(id);
             if (subtask != null) {
                 subtasks.remove(id);
+                historyManager.remove(id);
                 Epic epic = getEpicById(subtask.getEpicId());
                 epic.removeSubtask(subtask);
                 updateEpicState(epic.getId());
@@ -87,13 +89,18 @@ public class InMemoryTaskManager implements TaskManager {
         if (epics.containsKey(id)) {
             for (Subtask subtask : epicSubtasks) {
                 subtasks.remove(subtask.getId());
+                historyManager.remove(subtask.getId());
             }
             epics.remove(id);
+            historyManager.remove(id);
         }
     }
 
     @Override
     public void removeAllTasks() {
+        for (Task task : tasks.values()) {
+            historyManager.remove(task.getId());
+        }
         tasks.clear();
     }
 
@@ -104,6 +111,7 @@ public class InMemoryTaskManager implements TaskManager {
             Epic epic = getEpicById(epicId);
             ArrayList<Subtask> epicSubtasks = epic.getSubtasks();
             epicSubtasks.clear();
+            historyManager.remove(subtask.getId());
             updateEpicState(epicId);
         }
         subtasks.clear();
@@ -111,6 +119,12 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void removeAllEpics() {
+        for (Subtask subtask : subtasks.values()) {
+            historyManager.remove(subtask.getId());
+        }
+        for (Epic epic : epics.values()) {
+            historyManager.remove(epic.getId());
+        }
         subtasks.clear();
         epics.clear();
     }
