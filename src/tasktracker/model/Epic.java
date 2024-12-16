@@ -9,6 +9,10 @@ public class Epic extends Task {
         super(name, description, taskState);
     }
 
+    public Epic(int id) {
+        super(id);
+    }
+
     public ArrayList<Subtask> getSubtasks() {
         return this.subtasks;
     }
@@ -36,5 +40,16 @@ public class Epic extends Task {
     @Override
     public TaskType getTaskType() {
         return TaskType.EPIC;
+    }
+
+    @Override
+    public String toString() {
+        return "Epic{" +
+                "subtasks=" + subtasks +
+                ", id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", taskState=" + taskState +
+                '}';
     }
 }

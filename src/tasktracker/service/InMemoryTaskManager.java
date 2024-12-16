@@ -5,12 +5,13 @@ import tasktracker.model.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class InMemoryTaskManager implements TaskManager {
     protected int idCounter;
-    private HashMap<Integer, Task> tasks = new HashMap<Integer, Task>();
-    private HashMap<Integer, Subtask> subtasks = new HashMap<Integer, Subtask>();
-    private HashMap<Integer, Epic> epics = new HashMap<Integer, Epic>();
+    private Map<Integer, Task> tasks = new HashMap<Integer, Task>();
+    private Map<Integer, Subtask> subtasks = new HashMap<Integer, Subtask>();
+    private Map<Integer, Epic> epics = new HashMap<Integer, Epic>();
     private HistoryManager historyManager = Managers.getDefaultHistory();
 
     public int getCurrentId() {
