@@ -7,7 +7,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FileBackedTaskManager extends InMemoryTaskManager implements TaskManager {
+public class FileBackedTaskManager extends InMemoryTaskManager {
     private final File file;
 
     public FileBackedTaskManager(File file) {
@@ -15,7 +15,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
     }
 
     private void save() {
-        if (file == null) return;
+        if (file == null) {
+            return;
+        }
         try (FileWriter fileWriter = new FileWriter(file)) {
             fileWriter.write("id,type,name,status,description,epic\n");
             List<Task> allTasks = new ArrayList<>(getAllTasks().size() + getAllSubtasks().size() + getAllEpics().size());
@@ -44,8 +46,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
                     TaskType taskType = task.getTaskType();
                     switch (taskType) {
                         case TASK -> fileBackedTaskManager.createNewTask(task);
-                        case SUBTASK -> fileBackedTaskManager.createNewSubtask((Subtask) task);
                         case EPIC -> fileBackedTaskManager.createNewEpic((Epic) task);
+                        case SUBTASK -> fileBackedTaskManager.createNewSubtask((Subtask) task);
                     }
                 }
             }
@@ -74,8 +76,13 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
                 task.setName(taskName);
                 task.setTaskState(taskState);
                 task.setDescription(taskDescription);
-
                 return (T) task;
+            }
+            case TaskType.EPIC -> {
+                Epic epic = new Epic(taskId);
+                epic.setName(taskName);
+                epic.setDescription(taskDescription);
+                return (T) epic;
             }
             case TaskType.SUBTASK -> {
                 int epicId = Integer.parseInt(fields[5]);
@@ -84,16 +91,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
                 subtask.setTaskState(taskState);
                 subtask.setDescription(taskDescription);
                 subtask.setEpicId(epicId);
-
                 return (T) subtask;
             }
-            case TaskType.EPIC -> {
-                Epic epic = new Epic(taskId);
-                epic.setName(taskName);
-                epic.setDescription(taskDescription);
 
-                return (T) epic;
-            }
         }
         return null;
     }

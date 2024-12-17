@@ -2,15 +2,16 @@ import tasktracker.model.Epic;
 import tasktracker.model.Subtask;
 import tasktracker.model.Task;
 import tasktracker.model.TaskState;
-import tasktracker.service.InMemoryTaskManager;
+import tasktracker.service.FileBackedTaskManager;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class Main {
 
     public static void main(String[] args) {
-
-        InMemoryTaskManager taskManager = new InMemoryTaskManager();
+        File file = new File("files/test.csv");
+        FileBackedTaskManager taskManager = FileBackedTaskManager.loadFromFile(file);
 
         Task task1 = new Task("Купить чай", "Вкусный", TaskState.NEW);
         Task addedTask1 = taskManager.createNewTask(task1);
