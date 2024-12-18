@@ -5,16 +5,22 @@ import tasktracker.model.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class InMemoryTaskManager implements TaskManager {
     protected int idCounter;
-    private HashMap<Integer, Task> tasks = new HashMap<Integer, Task>();
-    private HashMap<Integer, Subtask> subtasks = new HashMap<Integer, Subtask>();
-    private HashMap<Integer, Epic> epics = new HashMap<Integer, Epic>();
+    private Map<Integer, Task> tasks = new HashMap<Integer, Task>();
+    private Map<Integer, Subtask> subtasks = new HashMap<Integer, Subtask>();
+    private Map<Integer, Epic> epics = new HashMap<Integer, Epic>();
     private HistoryManager historyManager = Managers.getDefaultHistory();
 
-    public int getCurrentId() {
-        return ++idCounter;
+    public int getCurrentId(int oldId) {
+        if (oldId > 0) {
+            idCounter = oldId;
+        } else {
+            ++idCounter;
+        }
+        return idCounter;
     }
 
     @Override
@@ -131,7 +137,8 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Task createNewTask(Task task) {
-        int id = this.getCurrentId();
+        int oldId = task.getId();
+        int id = this.getCurrentId(oldId);
         task.setId(id);
         tasks.put(task.getId(), task);
         return task;
@@ -139,18 +146,25 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Subtask createNewSubtask(Subtask subtask) {
-        int subtaskId = this.getCurrentId();
+        int oldId = subtask.getId();
+        int subtaskId = this.getCurrentId(oldId);
+
         Epic epic = getEpicById(subtask.getEpicId());
+
         subtask.setId(subtaskId);
         subtasks.put(subtask.getId(), subtask);
-        epic.addSubtask(subtask);
-        updateEpicState(epic.getId());
+        if (epic != null && epic.getId() == subtask.getEpicId()) {
+            epic.addSubtask(subtask);
+            updateEpicState(epic.getId());
+        }
         return subtask;
     }
 
     @Override
     public Epic createNewEpic(Epic epic) {
-        int id = this.getCurrentId();
+        int oldId = epic.getId();
+        int id = this.getCurrentId(oldId);
+
         epic.setId(id);
         epics.put(epic.getId(), epic);
         return epic;

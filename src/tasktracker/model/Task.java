@@ -14,6 +14,11 @@ public class Task {
         this.taskState = taskState;
     }
 
+    public Task(int id) {
+        this.taskState = TaskState.NEW;
+        this.id = id;
+    }
+
     public TaskType getTaskType() {
         return TaskType.TASK;
     }
