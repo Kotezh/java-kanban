@@ -70,7 +70,7 @@ public class Task {
         this.taskState = taskState;
     }
 
-    public LocalDateTime getEndTime(){
+    public LocalDateTime getEndTime() {
         return startTime.plus(duration);
     }
 
