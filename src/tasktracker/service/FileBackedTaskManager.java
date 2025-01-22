@@ -1,11 +1,16 @@
 package tasktracker.service;
 
+import tasktracker.exceptions.DateTimeException;
 import tasktracker.exceptions.ManagerSaveException;
 import tasktracker.model.*;
 
 import java.io.*;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import static tasktracker.model.Task.dateTimeFormatter;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
     private final File file;
@@ -14,26 +19,30 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         this.file = file;
     }
 
-    private void save() {
+    private void save() throws DateTimeException {
         if (file == null) {
             return;
         }
         try (FileWriter fileWriter = new FileWriter(file)) {
-            fileWriter.write("id,type,name,status,description,epic\n");
+            fileWriter.write("id,type,name,status,description,start,duration,epic\n");
             List<Task> allTasks = new ArrayList<>(getAllTasks().size() + getAllSubtasks().size() + getAllEpics().size());
             allTasks.addAll(getAllTasks());
             allTasks.addAll(getAllSubtasks());
             allTasks.addAll(getAllEpics());
 
-            for (Task task : allTasks) {
-                fileWriter.write(toString(task));
-            }
+            allTasks.stream().forEach(task -> {
+                try {
+                    fileWriter.write(toString(task));
+                } catch (IOException e) {
+                    throw new ManagerSaveException("При записи файла произошла ошибка");
+                }
+            });
         } catch (IOException e) {
             throw new ManagerSaveException("При записи файла произошла ошибка");
         }
     }
 
-    public static FileBackedTaskManager loadFromFile(File file) {
+    public static FileBackedTaskManager loadFromFile(File file) throws DateTimeException {
         FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager(file);
         try (BufferedReader bfReader = new BufferedReader(new FileReader(file))) {
             while (bfReader.ready()) {
@@ -59,41 +68,67 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     private <T extends Task> String toString(T task) {
-        String epicId = task instanceof Subtask ? "," + ((Subtask) task).getEpicId() : "";
-        return task.getId() + "," + task.getTaskType() + "," + task.getName() + "," + task.getTaskState() + "," + task.getDescription() + epicId + "\n";
+        String epicId = task instanceof Subtask ? String.valueOf(((Subtask) task).getEpicId()) : "";
+
+        String startTime = "";
+        String duration = "";
+
+        if (task.getStartTime() != null) {
+            startTime = task.getStartTime().format(dateTimeFormatter);
+        }
+        if (task.getDuration() != null) {
+            duration = String.valueOf(task.getDuration().toMinutes());
+        }
+
+        return task.getId() + "," + task.getTaskType() + "," + task.getName() + ","
+                + task.getTaskState() + "," + task.getDescription() + ","
+                + startTime + "," + duration + "," + epicId + "\n";
     }
 
-    private <T extends Task> T fromString(String value) {
+    private <T extends Task> T fromString(String value) throws DateTimeException {
         String[] fields = value.split(",");
         int taskId = Integer.parseInt(fields[0]);
         TaskType taskType = TaskType.valueOf(fields[1]);
         String taskName = fields[2];
         TaskState taskState = TaskState.valueOf(fields[3]);
         String taskDescription = fields[4];
+        LocalDateTime startTime = LocalDateTime.parse(fields[5], dateTimeFormatter);
+        Duration duration = Duration.ofMinutes(Integer.parseInt(fields[6]));
+        LocalDateTime endTime = startTime.plus(duration);
+
         switch (taskType) {
             case TaskType.TASK -> {
                 Task task = new Task(taskId);
                 task.setName(taskName);
                 task.setTaskState(taskState);
                 task.setDescription(taskDescription);
+                task.setStartTime(startTime);
+                task.setDuration(duration);
+                task.setEndTime(endTime);
+
                 return (T) task;
             }
             case TaskType.EPIC -> {
                 Epic epic = new Epic(taskId);
                 epic.setName(taskName);
                 epic.setDescription(taskDescription);
+                epic.setDuration(duration);
+                epic.setEndTime(endTime);
+                epic.setStartTime(startTime);
                 return (T) epic;
             }
             case TaskType.SUBTASK -> {
-                int epicId = Integer.parseInt(fields[5]);
+                int epicId = Integer.parseInt(fields[7]);
                 Subtask subtask = new Subtask(taskId);
                 subtask.setName(taskName);
                 subtask.setTaskState(taskState);
                 subtask.setDescription(taskDescription);
                 subtask.setEpicId(epicId);
+                subtask.setStartTime(startTime);
+                subtask.setDuration(duration);
+                subtask.setEndTime(endTime);
                 return (T) subtask;
             }
-
         }
         return null;
     }

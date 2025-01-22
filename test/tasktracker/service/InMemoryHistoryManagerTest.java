@@ -16,13 +16,13 @@ class InMemoryHistoryManagerTest {
 
     @BeforeEach
     void beforeEach() {
-        Task task1 = new Task("Купить чай", "Вкусный", TaskState.NEW);
+        Task task1 = new Task("Купить чай", "Вкусный", TaskState.NEW, "01.02.2025 11:00", 30L);
         Task addedTask1 = taskManager.createNewTask(task1);
         Task touchedTask1 = taskManager.getTaskById(addedTask1.getId());
-        Task task2 = new Task("Посмотреть вебинар", "Запись эфира на capoeiraskills", TaskState.NEW);
+        Task task2 = new Task("Посмотреть вебинар", "Запись эфира на capoeiraskills", TaskState.NEW, "03.02.2025 11:00", 30L);
         Task addedTask2 = taskManager.createNewTask(task2);
         Task touchedTask2 = taskManager.getTaskById(addedTask2.getId());
-        Task task3 = new Task("Сдать задание", "Успеть вовремя", TaskState.NEW);
+        Task task3 = new Task("Сдать задание", "Успеть вовремя", TaskState.NEW, "04.02.2025 11:00", 30L);
         Task addedTask3 = taskManager.createNewTask(task3);
         Task touchedTask3 = taskManager.getTaskById(addedTask3.getId());
     }

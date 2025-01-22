@@ -13,21 +13,21 @@ public class Main {
         File file = new File("files/test.csv");
         FileBackedTaskManager taskManager = FileBackedTaskManager.loadFromFile(file);
 
-        Task task1 = new Task("Купить чай", "Вкусный", TaskState.NEW);
+        Task task1 = new Task("Купить чай", "Вкусный", TaskState.NEW, "01.12.2026 10:00", 30L);
         Task addedTask1 = taskManager.createNewTask(task1);
-        Task task2 = new Task("Посмотреть вебинар", "Запись эфира на capoeiraskills", TaskState.NEW);
+        Task task2 = new Task("Посмотреть вебинар", "Запись эфира на capoeiraskills", TaskState.NEW, "02.11.2026 12:00", 30L);
         Task addedTask2 = taskManager.createNewTask(task2);
 
         Epic epic1 = new Epic("Дом", "Здесь будут задачи по дому", TaskState.NEW);
         Epic addedEpic1 = taskManager.createNewEpic(epic1);
-        Subtask subtask1 = new Subtask("Купить продукты", "Сделать заказ в Ленте", TaskState.NEW, addedEpic1.getId());
+        Subtask subtask1 = new Subtask("Купить продукты", "Сделать заказ в Ленте", TaskState.NEW, "03.12.2025 13:00", 30L, addedEpic1.getId());
         Subtask addedSubtask1 = taskManager.createNewSubtask(subtask1);
-        Subtask subtask2 = new Subtask("Приготовить суши-торт", "решить запеченный или нет", TaskState.NEW, addedEpic1.getId());
+        Subtask subtask2 = new Subtask("Приготовить суши-торт", "решить запеченный или нет", TaskState.NEW, "04.12.2025 14:00", 30L, addedEpic1.getId());
         Subtask addedSubtask2 = taskManager.createNewSubtask(subtask2);
 
         Epic epic2 = new Epic("Работа", "Здесь будут задачи по работе", TaskState.NEW);
         Epic addedEpic2 = taskManager.createNewEpic(epic2);
-        Subtask subtask3 = new Subtask("Добить таску", "Исправить валидацию формы и значение в поле Название магазина", TaskState.NEW, addedEpic2.getId());
+        Subtask subtask3 = new Subtask("Добить таску", "Исправить валидацию формы и значение в поле Название магазина", TaskState.NEW, "05.01.2025 15:00", 30L, addedEpic2.getId());
         Subtask addedSubtask3 = taskManager.createNewSubtask(subtask3);
 
         System.out.println("\nСписок задач:");
@@ -108,6 +108,9 @@ public class Main {
         for (Task task : taskManager.getHistory()) {
             System.out.println(task);
         }
+
+        System.out.println("\n Отсортированный список задач:");
+        System.out.println(taskManager.getPrioritizedTasks());
 
         System.out.println("\nУдаление всех задач:");
         taskManager.removeAllTasks();

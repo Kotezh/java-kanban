@@ -47,4 +47,6 @@ public interface TaskManager {
     Epic updateEpic(Epic epic);
 
     List<Task> getHistory();
+
+    List<Task> getPrioritizedTasks();
 }

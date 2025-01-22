@@ -13,8 +13,13 @@ public class Subtask extends Task {
         super(id);
     }
 
+    public Subtask(String name, String description, TaskState taskState, String startTime, long duration, int epicId) {
+        super(name, description, taskState, startTime, duration);
+        this.epicId = epicId;
+    }
+
     public int getEpicId() {
-        return epicId;
+        return this.epicId;
     }
 
     public void setEpicId(int epicId) {
@@ -34,6 +39,8 @@ public class Subtask extends Task {
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", taskState=" + taskState +
+                ", startTime=" + startTime +
+                ", duration=" + duration +
                 '}';
     }
 }

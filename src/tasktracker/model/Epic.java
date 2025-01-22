@@ -1,9 +1,11 @@
 package tasktracker.model;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Epic extends Task {
     private ArrayList<Subtask> subtasks = new ArrayList<>();
+    private LocalDateTime endTime;
 
     public Epic(String name, String description, TaskState taskState) {
         super(name, description, taskState);
@@ -15,10 +17,6 @@ public class Epic extends Task {
 
     public ArrayList<Subtask> getSubtasks() {
         return this.subtasks;
-    }
-
-    public void setSubtasks(ArrayList<Subtask> subtasks) {
-        this.subtasks = subtasks;
     }
 
     public void addSubtask(Subtask subtask) {
@@ -37,9 +35,18 @@ public class Epic extends Task {
         this.subtasks.remove(subtask);
     }
 
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
+    }
+
     @Override
     public TaskType getTaskType() {
         return TaskType.EPIC;
+    }
+
+    @Override
+    public LocalDateTime getEndTime() {
+        return endTime;
     }
 
     @Override
@@ -50,6 +57,9 @@ public class Epic extends Task {
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", taskState=" + taskState +
+                ", startTime=" + startTime +
+                ", duration=" + duration +
+                ", endTime=" + endTime +
                 '}';
     }
 }
