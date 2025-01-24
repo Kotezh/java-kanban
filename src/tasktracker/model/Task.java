@@ -1,5 +1,8 @@
 package tasktracker.model;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class Task {
@@ -7,6 +10,9 @@ public class Task {
     protected String name;
     protected String description;
     protected TaskState taskState;
+    protected Duration duration;
+    protected LocalDateTime startTime;
+    public static DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
 
     public Task(String name, String description, TaskState taskState) {
         this.name = name;
@@ -17,6 +23,14 @@ public class Task {
     public Task(int id) {
         this.taskState = TaskState.NEW;
         this.id = id;
+    }
+
+    public Task(String name, String description, TaskState taskState, LocalDateTime startTime, Duration duration) {
+        this.name = name;
+        this.description = description;
+        this.taskState = taskState;
+        this.startTime = startTime;
+        this.duration = duration;
     }
 
     public TaskType getTaskType() {
@@ -53,6 +67,30 @@ public class Task {
 
     public void setTaskState(TaskState taskState) {
         this.taskState = taskState;
+    }
+
+    public LocalDateTime getEndTime() {
+        return startTime.plus(duration);
+    }
+
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public static <T extends Task> int compareTime(T a, T b) {
+        return a.getStartTime().isBefore(b.getStartTime()) ? -1 : 1;
     }
 
     @Override

@@ -5,10 +5,13 @@ import org.junit.jupiter.api.Test;
 import tasktracker.model.Task;
 import tasktracker.model.TaskState;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static tasktracker.model.Task.dateTimeFormatter;
 
 class InMemoryHistoryManagerTest {
     private TaskManager taskManager = Managers.getDefault();
@@ -16,13 +19,13 @@ class InMemoryHistoryManagerTest {
 
     @BeforeEach
     void beforeEach() {
-        Task task1 = new Task("Купить чай", "Вкусный", TaskState.NEW);
+        Task task1 = new Task("Купить чай", "Вкусный", TaskState.NEW, LocalDateTime.parse("01.10.2027 10:00", dateTimeFormatter), Duration.ofMinutes(30L));
         Task addedTask1 = taskManager.createNewTask(task1);
         Task touchedTask1 = taskManager.getTaskById(addedTask1.getId());
-        Task task2 = new Task("Посмотреть вебинар", "Запись эфира на capoeiraskills", TaskState.NEW);
+        Task task2 = new Task("Посмотреть вебинар", "Запись эфира на capoeiraskills", TaskState.NEW, LocalDateTime.parse("01.11.2027 10:00", dateTimeFormatter), Duration.ofMinutes(30L));
         Task addedTask2 = taskManager.createNewTask(task2);
         Task touchedTask2 = taskManager.getTaskById(addedTask2.getId());
-        Task task3 = new Task("Сдать задание", "Успеть вовремя", TaskState.NEW);
+        Task task3 = new Task("Сдать задание", "Успеть вовремя", TaskState.NEW, LocalDateTime.parse("02.11.2027 10:00", dateTimeFormatter), Duration.ofMinutes(30L));
         Task addedTask3 = taskManager.createNewTask(task3);
         Task touchedTask3 = taskManager.getTaskById(addedTask3.getId());
     }
