@@ -8,11 +8,13 @@ import tasktracker.model.Subtask;
 import tasktracker.model.Task;
 import tasktracker.model.TaskState;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static tasktracker.model.Task.dateTimeFormatter;
 
 abstract class TaskManagerTest<T extends TaskManager> {
 
@@ -28,23 +30,23 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @BeforeEach
     void beforeEach() {
-        Task task1 = new Task("Задача 1", "Задача 1", TaskState.NEW, "01.01.2025 11:00", 30L);
+        Task task1 = new Task("Задача 1", "Задача 1", TaskState.NEW, LocalDateTime.parse("01.01.2025 11:00", dateTimeFormatter), Duration.ofMinutes(30L));
         addedTask1 = taskManager.createNewTask(task1); // id=1
-        Task task2 = new Task("Задача 2", "Задача 2", TaskState.NEW, "02.01.2025 11:00", 40L);
+        Task task2 = new Task("Задача 2", "Задача 2", TaskState.NEW, LocalDateTime.parse("02.01.2025 11:00", dateTimeFormatter), Duration.ofMinutes(30L));
         addedTask2 = taskManager.createNewTask(task2); // id=2
 
-        Epic epic1 = new Epic("Эпик 1", "Эпик 1, 3 подзадачи", TaskState.NEW);
+        Epic epic1 = new Epic("Эпик 1", "Эпик 1, 3 подзадачи");
         addedEpic1 = taskManager.createNewEpic(epic1); // id=3
-        Subtask subtask1 = new Subtask("Подзадача 1", "Подзадача 1, Эпик 1", TaskState.NEW, "03.01.2025 11:00", 50L, addedEpic1.getId());
+        Subtask subtask1 = new Subtask("Подзадача 1", "Подзадача 1, Эпик 1", TaskState.NEW, LocalDateTime.parse("03.01.2025 11:00", dateTimeFormatter), Duration.ofMinutes(30L), addedEpic1.getId());
         addedSubtask1 = taskManager.createNewSubtask(subtask1); // id=4
-        Subtask subtask2 = new Subtask("Подзадача 2", "Подзадача 2, Эпик 1", TaskState.NEW, "04.01.2025 11:00", 60L, addedEpic1.getId());
+        Subtask subtask2 = new Subtask("Подзадача 2", "Подзадача 2, Эпик 1", TaskState.NEW, LocalDateTime.parse("04.01.2025 11:00", dateTimeFormatter), Duration.ofMinutes(30L), addedEpic1.getId());
         addedSubtask2 = taskManager.createNewSubtask(subtask2); // id=5
-        Subtask subtask3 = new Subtask("Подзадача 3", "Подзадача 3, Эпик 1", TaskState.NEW, "05.01.2025 11:00", 70L, addedEpic1.getId());
+        Subtask subtask3 = new Subtask("Подзадача 3", "Подзадача 3, Эпик 1", TaskState.NEW, LocalDateTime.parse("05.01.2025 11:00", dateTimeFormatter), Duration.ofMinutes(30L), addedEpic1.getId());
         addedSubtask3 = taskManager.createNewSubtask(subtask3); // id=6
 
-        Epic epic2 = new Epic("Эпик 2", "Эпик 2, 1 подзадача", TaskState.NEW);
+        Epic epic2 = new Epic("Эпик 2", "Эпик 2, 1 подзадача");
         addedEpic2 = taskManager.createNewEpic(epic2); // id=7
-        Subtask subtask4 = new Subtask("Подзадача 4", "Подзадача 4, Эпик 2", TaskState.NEW, "06.01.2025 11:00", 50L, addedEpic2.getId());
+        Subtask subtask4 = new Subtask("Подзадача 4", "Подзадача 4, Эпик 2", TaskState.NEW, LocalDateTime.parse("06.01.2025 11:00", dateTimeFormatter), Duration.ofMinutes(30L), addedEpic2.getId());
         addedSubtask4 = taskManager.createNewSubtask(subtask4); // id=8
     }
 
@@ -213,8 +215,8 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     public void shouldBePositiveWhenEpicsIdIsEquals() {
-        Epic epic1 = new Epic("Эпик 1", "Эпик 1", TaskState.NEW);
-        Epic epic2 = new Epic("Эпик 1", "Эпик 1", TaskState.NEW);
+        Epic epic1 = new Epic("Эпик 1", "Эпик 1");
+        Epic epic2 = new Epic("Эпик 1", "Эпик 1");
 
         assertEquals(epic1, epic2);
     }
@@ -263,7 +265,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
             taskManager.updateEpic(taskManager.getEpicById(3));
         });
 
-        assertTrue(taskManager.getAllSubtasks().stream().allMatch(subtask -> subtask.getTaskState()  == TaskState.DONE));
+        assertTrue(taskManager.getAllSubtasks().stream().allMatch(subtask -> subtask.getTaskState() == TaskState.DONE));
     }
 
     @Test

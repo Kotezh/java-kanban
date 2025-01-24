@@ -139,9 +139,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Task createNewTask(Task task) {
-        if (checkCrossedTime(task)) {
-            throw new DateTimeException("На это время уже запланирована другая задача");
-        }
+        checkCrossedTime(task, "На это время уже запланирована другая задача");
         int oldId = task.getId();
         int id = this.getCurrentId(oldId);
         task.setId(id);
@@ -152,9 +150,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Subtask createNewSubtask(Subtask subtask) {
-        if (checkCrossedTime(subtask)) {
-            throw new DateTimeException("На это время уже запланирована другая подзадача");
-        }
+        checkCrossedTime(subtask, "На это время уже запланирована другая подзадача");
         int oldId = subtask.getId();
         int subtaskId = this.getCurrentId(oldId);
 
@@ -182,9 +178,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Task updateTask(Task task) {
-        if (checkCrossedTime(task)) {
-            throw new DateTimeException("На это время уже запланирована другая задача");
-        }
+        checkCrossedTime(task, "На это время уже запланирована другая задача");
         int id = task.getId();
         if (tasks.containsKey(id)) {
             tasks.put(id, task);
@@ -196,9 +190,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Subtask updateSubtask(Subtask subtask) {
-        if (checkCrossedTime(subtask)) {
-            throw new DateTimeException("На это время уже запланирована другая подзадача");
-        }
+        checkCrossedTime(subtask, "На это время уже запланирована другая подзадача");
         int subtaskId = subtask.getId();
         if (subtasks.containsKey(subtaskId)) {
             subtasks.put(subtaskId, subtask);
@@ -257,15 +249,15 @@ public class InMemoryTaskManager implements TaskManager {
         return new ArrayList<>(treeSet);
     }
 
-    public <T extends Task> boolean checkCrossedTime(T task) {
+    public <T extends Task> void checkCrossedTime(T task, String message) {
         LocalDateTime startTime = task.getStartTime();
         LocalDateTime endTime = task.getEndTime();
 
         if (startTime == null || endTime == null) {
-            return false;
+            throw new DateTimeException(message);
         }
 
-        return treeSet.stream().filter(treeTask -> treeTask.getId() != task.getId()).anyMatch(treeTask -> {
+        boolean isCrossed = treeSet.stream().filter(treeTask -> treeTask.getId() != task.getId()).anyMatch(treeTask -> {
             LocalDateTime treeTaskStart = treeTask.getStartTime();
             LocalDateTime treeTaskEnd = treeTask.getEndTime();
             if (treeTaskEnd.isAfter(startTime) && treeTaskEnd.isBefore(endTime)) {
@@ -277,6 +269,9 @@ public class InMemoryTaskManager implements TaskManager {
 
             return false;
         });
+        if (isCrossed) {
+            throw new DateTimeException(message);
+        }
     }
 
     public void addToTreeSet(Task task) {

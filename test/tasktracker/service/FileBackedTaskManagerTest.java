@@ -7,8 +7,11 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static tasktracker.model.Task.dateTimeFormatter;
 
 class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskManager> {
 
@@ -58,9 +61,9 @@ class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskManager> {
     void shouldSave3TasksToFile() throws IOException {
         File tempFile = File.createTempFile("testFile2", ".csv");
         taskManager = new FileBackedTaskManager(tempFile);
-        Task task = new Task("task", "task description", TaskState.NEW, "01.03.2025 11:00", 30);
-        Epic epic = new Epic("epic", "epic description", TaskState.NEW);
-        Subtask subtask = new Subtask("subtask", "subtask description", TaskState.NEW, "02.03.2025 11:00", 30, 2);
+        Task task = new Task("task", "task description", TaskState.NEW, LocalDateTime.parse("01.03.2025 10:00", dateTimeFormatter), Duration.ofMinutes(30L));
+        Epic epic = new Epic("epic", "epic description");
+        Subtask subtask = new Subtask("subtask", "subtask description", TaskState.NEW, LocalDateTime.parse("02.03.2025 11:00", dateTimeFormatter), Duration.ofMinutes(30L), 2);
 
         Task savedTask = taskManager.createNewTask(task);
         Epic savedEpic = taskManager.createNewEpic(epic);

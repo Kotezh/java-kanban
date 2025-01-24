@@ -29,14 +29,10 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             allTasks.addAll(getAllTasks());
             allTasks.addAll(getAllSubtasks());
             allTasks.addAll(getAllEpics());
-
-            allTasks.stream().forEach(task -> {
-                try {
-                    fileWriter.write(toString(task));
-                } catch (IOException e) {
-                    throw new ManagerSaveException("При записи файла произошла ошибка");
-                }
-            });
+            // если цикл переделать на стрим, то в Идее возникает ошибка и она предлагает обернуть в try-catch
+            for (Task task : allTasks) {
+                fileWriter.write(toString(task));
+            }
         } catch (IOException e) {
             throw new ManagerSaveException("При записи файла произошла ошибка");
         }
@@ -68,7 +64,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     private <T extends Task> String toString(T task) {
-        String epicId = task instanceof Subtask ? String.valueOf(((Subtask) task).getEpicId()) : "";
+        String epicId = task.getTaskType() == TaskType.SUBTASK ? String.valueOf(((Subtask) task).getEpicId()) : "";
 
         String startTime = "";
         String duration = "";
@@ -104,7 +100,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 task.setDescription(taskDescription);
                 task.setStartTime(startTime);
                 task.setDuration(duration);
-                task.setEndTime(endTime);
 
                 return (T) task;
             }
@@ -126,7 +121,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 subtask.setEpicId(epicId);
                 subtask.setStartTime(startTime);
                 subtask.setDuration(duration);
-                subtask.setEndTime(endTime);
                 return (T) subtask;
             }
         }
