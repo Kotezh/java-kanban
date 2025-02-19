@@ -1,21 +1,101 @@
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.sun.net.httpserver.HttpServer;
+import tasktracker.adapters.DurationAdapter;
+import tasktracker.adapters.LocalDateTimeAdapter;
 import tasktracker.model.Epic;
 import tasktracker.model.Subtask;
 import tasktracker.model.Task;
 import tasktracker.model.TaskState;
+import tasktracker.server.SubtaskHandler;
+import tasktracker.server.TaskHandler;
+import tasktracker.server.EpicHandler;
+import tasktracker.server.HistoryHandler;
+import tasktracker.server.PrioritizedHandler;
 import tasktracker.service.FileBackedTaskManager;
+import tasktracker.service.HistoryManager;
+import tasktracker.service.Managers;
+import tasktracker.service.TaskManager;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import static tasktracker.model.Task.dateTimeFormatter;
 
-public class Main {
+public class HttpTaskServer {
+    private static final int PORT = 8080;
+    private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
+    private final HttpServer httpServer;
+    private final TaskManager taskManager;
+    protected Gson gson;
 
-    public static void main(String[] args) {
+    public static Gson getGson() {
+        return new GsonBuilder()
+                .serializeNulls()
+                .setPrettyPrinting()
+                .registerTypeAdapter(Duration.class, new DurationAdapter())
+                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
+                .create();
+    }
+
+    public HttpTaskServer(TaskManager taskManager) throws IOException {
+        this.taskManager = taskManager;
+        gson = HttpTaskServer.getGson();
+        try {
+            httpServer = HttpServer.create(new InetSocketAddress(PORT), 0);
+            httpServer.createContext("/tasks", new TaskHandler(taskManager, gson));
+            httpServer.createContext("/subtasks", new SubtaskHandler(taskManager, gson));
+            httpServer.createContext("/epics", new EpicHandler(taskManager, gson));
+            httpServer.createContext("/history", new HistoryHandler(taskManager, gson));
+            httpServer.createContext("/prioritized", new PrioritizedHandler(taskManager, gson));
+
+        } catch (IOException exception) {
+            throw new RuntimeException("Сервер не создан на порту " + PORT);
+        }
+    }
+
+    public void start() {
+        httpServer.start();
+        System.out.printf("Сервер запущен на %s порту ", PORT);
+    }
+
+    public void stop() {
+        httpServer.stop(1);
+        System.out.printf("Сервер остановлен на %s порту ", PORT);
+    }
+
+    public static void main(String[] args) throws IOException, InterruptedException {
+//        URI uri = URI.create("https://localhost:8080/tasks");
+        TaskManager taskManager = Managers.getDefault();
+//        HistoryManager historyManager = Managers.getDefaultHistory();
+        HttpTaskServer taskServer = new HttpTaskServer(taskManager);
+//        HttpClient httpClient = HttpClient.newHttpClient();
+        taskServer.start();
+//        Task newTask = new Task("Купить чай", "Вкусный", TaskState.NEW, LocalDateTime.parse("01.12.2026 10:00", dateTimeFormatter), Duration.ofMinutes(30L));
+//        HttpRequest httpRequest = HttpRequest
+//                .newBuilder()
+//                .uri(uri)
+//                .POST(HttpRequest.BodyPublishers.ofString(getGson().toJson(newTask), DEFAULT_CHARSET))
+////                .GET()
+//                .build();
+//        HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+//        System.out.println(response.statusCode());
+//        System.out.println(response.body());
+//        taskServer.stop();
+
+
         File file = new File("files/test.csv");
-        FileBackedTaskManager taskManager = FileBackedTaskManager.loadFromFile(file);
+        FileBackedTaskManager fileBackedTaskManager = FileBackedTaskManager.loadFromFile(file);
 
         Task task1 = new Task("Купить чай", "Вкусный", TaskState.NEW, LocalDateTime.parse("01.12.2026 10:00", dateTimeFormatter), Duration.ofMinutes(30L));
         Task addedTask1 = taskManager.createNewTask(task1);
