@@ -20,41 +20,14 @@ public abstract class BaseHttpHandler implements HttpHandler {
         this.gson = gson;
     }
 
-//    @Override
-//    public void handle(HttpExchange exchange) {
-//        String requestMethod = exchange.getRequestMethod();
-//        String[] path = exchange.getRequestURI().getPath().split("/");
-//
-//        switch (requestMethod) {
-//            case "GET": {
-//                handleGet(exchange);
-//                break;
-//            }
-//            case "POST": {
-//                handlePost(exchange);
-//                break;
-//            }
-//            case "DELETE": {
-//                handleDelete(exchange);
-//                break;
-//            }
-//
-//            default: {
-//                writeResponse(exchange, "Такого эндпоинта не существует", 404);
-//            }
-//        }
-//        sendState(exchange, 404);
-//    }
-
     protected void sendText(HttpExchange h, String text, int statusCode) throws IOException {
 
         byte[] response = text.getBytes(DEFAULT_CHARSET);
         h.getResponseHeaders().add("Content-Type", "application/json;charset=utf-8");
         h.sendResponseHeaders(statusCode, response.length);
-        try(OutputStream os = h.getResponseBody()){
+        try (OutputStream os = h.getResponseBody()) {
             os.write(response);
         }
-//        h.getResponseBody().write(response);
         h.close();
     }
 

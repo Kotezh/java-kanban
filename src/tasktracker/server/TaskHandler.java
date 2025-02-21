@@ -80,9 +80,11 @@ public class TaskHandler extends BaseHttpHandler {
                     sendSuccessUpdate(httpExchange, "Создана новая задача");
                 }
                 if (pathParts.length == 4) {
-//                int taskId = Integer.parseInt(pathParts[1]);
-                    taskManager.updateTask(taskObject);
-                    sendSuccessUpdate(httpExchange, "Задача успешно обновлена");
+                    int taskId = Integer.parseInt(pathParts[3]);
+                    if (taskId != -1) {
+                        taskManager.updateTask(taskObject);
+                        sendSuccessUpdate(httpExchange, "Задача успешно обновлена");
+                    }
                 }
             } catch (NotFoundException e) {
                 sendNotFound(httpExchange, "Задача не найдена");

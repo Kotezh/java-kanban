@@ -6,12 +6,8 @@ import tasktracker.exceptions.NotFoundException;
 import tasktracker.service.TaskManager;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 
 public class PrioritizedHandler extends BaseHttpHandler {
-    private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
-
     public PrioritizedHandler(TaskManager taskManager, Gson gson) {
         super(taskManager, gson);
     }

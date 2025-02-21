@@ -5,7 +5,6 @@ import com.sun.net.httpserver.HttpExchange;
 import tasktracker.exceptions.DateTimeException;
 import tasktracker.exceptions.NotFoundException;
 import tasktracker.model.Subtask;
-import tasktracker.model.Task;
 import tasktracker.service.TaskManager;
 
 import java.io.IOException;
@@ -78,9 +77,11 @@ public class SubtaskHandler extends BaseHttpHandler {
                     sendSuccessUpdate(httpExchange, "Создана новая подзадача");
                 }
                 if (pathParts.length == 4) {
-//                int taskId = Integer.parseInt(pathParts[3]);
-                    taskManager.updateSubtask(subtaskObject);
-                    sendSuccessUpdate(httpExchange, "Подзадача успешно обновлена");
+                    int taskId = Integer.parseInt(pathParts[3]);
+                    if (taskId != -1) {
+                        taskManager.updateSubtask(subtaskObject);
+                        sendSuccessUpdate(httpExchange, "Подзадача успешно обновлена");
+                    }
                 }
             } catch (NotFoundException e) {
                 sendNotFound(httpExchange, "Подзадача не найдена");

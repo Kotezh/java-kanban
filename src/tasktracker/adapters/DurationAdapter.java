@@ -11,19 +11,19 @@ public class DurationAdapter extends TypeAdapter<Duration> {
 
     @Override
     public void write(JsonWriter jsonWriter, Duration duration) throws IOException {
-//        if (duration != null) {
+        if (duration != null) {
             jsonWriter.value(duration.toString());
-//            return;
-//        }
-//        jsonWriter.nullValue();
+            return;
+        }
+        jsonWriter.nullValue();
     }
 
     @Override
     public Duration read(JsonReader jsonReader) throws IOException {
-//        if (jsonReader.peek() != null) {
+        if (jsonReader.peek() != null) {
             return Duration.parse(jsonReader.nextString());
-//        }
-//        jsonReader.nextNull();
-//        return null;
+        }
+        jsonReader.nextNull();
+        return null;
     }
 }

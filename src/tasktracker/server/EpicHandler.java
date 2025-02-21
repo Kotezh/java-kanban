@@ -5,7 +5,6 @@ import com.sun.net.httpserver.HttpExchange;
 import tasktracker.exceptions.DateTimeException;
 import tasktracker.exceptions.NotFoundException;
 import tasktracker.model.Epic;
-import tasktracker.model.Task;
 import tasktracker.service.TaskManager;
 
 import java.io.IOException;
@@ -79,9 +78,11 @@ public class EpicHandler extends BaseHttpHandler {
                     sendSuccessUpdate(httpExchange, "Создан новый эпик");
                 }
                 if (pathParts.length == 4) {
-//                int taskId = Integer.parseInt(pathParts[3]);
-                    taskManager.updateEpic(epicObject);
-                    sendSuccessUpdate(httpExchange, "Эпик успешно обновлен");
+                    int taskId = Integer.parseInt(pathParts[3]);
+                    if (taskId != -1) {
+                        taskManager.updateEpic(epicObject);
+                        sendSuccessUpdate(httpExchange, "Эпик успешно обновлен");
+                    }
                 }
             } catch (NotFoundException e) {
                 sendNotFound(httpExchange, "Эпик не найден");

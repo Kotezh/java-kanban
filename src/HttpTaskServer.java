@@ -13,17 +13,12 @@ import tasktracker.server.EpicHandler;
 import tasktracker.server.HistoryHandler;
 import tasktracker.server.PrioritizedHandler;
 import tasktracker.service.FileBackedTaskManager;
-import tasktracker.service.HistoryManager;
 import tasktracker.service.Managers;
 import tasktracker.service.TaskManager;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
@@ -75,25 +70,12 @@ public class HttpTaskServer {
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {
-//        URI uri = URI.create("https://localhost:8080/tasks");
         TaskManager taskManager = Managers.getDefault();
-//        HistoryManager historyManager = Managers.getDefaultHistory();
         HttpTaskServer taskServer = new HttpTaskServer(taskManager);
-//        HttpClient httpClient = HttpClient.newHttpClient();
         taskServer.start();
-//        Task newTask = new Task("Купить чай", "Вкусный", TaskState.NEW, LocalDateTime.parse("01.12.2026 10:00", dateTimeFormatter), Duration.ofMinutes(30L));
-//        HttpRequest httpRequest = HttpRequest
-//                .newBuilder()
-//                .uri(uri)
-//                .POST(HttpRequest.BodyPublishers.ofString(getGson().toJson(newTask), DEFAULT_CHARSET))
-////                .GET()
-//                .build();
-//        HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
-//        System.out.println(response.statusCode());
-//        System.out.println(response.body());
-//        taskServer.stop();
+        taskServer.stop();
 
-
+//        TODO: возможно код ниже следует удалить?
         File file = new File("files/test.csv");
         FileBackedTaskManager fileBackedTaskManager = FileBackedTaskManager.loadFromFile(file);
 
