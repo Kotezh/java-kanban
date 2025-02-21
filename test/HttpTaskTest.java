@@ -61,9 +61,10 @@ class HttpTaskTest {
         taskManager.createNewTask(new Task("Задача 2", "Задача 2", TaskState.NEW, LocalDateTime.parse("01.01.2026 11:00", dateTimeFormatter), Duration.ofMinutes(30L)));
         taskManager.createNewTask(new Task("Задача 1", "Задача 1", TaskState.DONE, LocalDateTime.parse("01.01.2027 11:00", dateTimeFormatter), Duration.ofMinutes(30L)));
         HttpClient client = HttpClient.newHttpClient();
-        URI url = URI.create(URL + "/2");
+        URI url = URI.create(URL + "/1");
         HttpRequest request = HttpRequest.newBuilder().uri(url).GET().build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        System.out.println(response.body());
         Task task = gson.fromJson(response.body(), new TypeToken<Task>() {
         }.getType());
         assertEquals(200, response.statusCode(), "Статусы ответа не совпадает");
@@ -99,8 +100,8 @@ class HttpTaskTest {
         assertEquals(201, response.statusCode(), "Статусы ответа не совпадает");
         List<Task> tasksFromManager = taskManager.getAllTasks();
         assertNotNull(tasksFromManager, "Задачи не возвращаются");
-        assertEquals(2, tasksFromManager.size(), "Некорректное количество задач");
-        assertEquals(TaskState.DONE, taskManager.getTaskById(0).getTaskState(), "Некорректный статус задачи");
+        assertEquals(1, tasksFromManager.size(), "Некорректное количество задач");
+        assertEquals(TaskState.DONE, taskManager.getTaskById(1).getTaskState(), "Некорректный статус задачи");
     }
 
     @Test
@@ -121,14 +122,15 @@ class HttpTaskTest {
     @Test
     public void shouldBeTaskDeleted() throws IOException, InterruptedException, NotFoundException {
         taskManager.createNewTask(new Task("Задача 2", "Задача 2", TaskState.NEW, LocalDateTime.parse("01.01.2026 11:00", dateTimeFormatter), Duration.ofMinutes(30L)));
-        taskManager.createNewTask(new Task("Задача 1", "Задача 1", TaskState.DONE, LocalDateTime.parse("01.01.2026 11:00", dateTimeFormatter), Duration.ofMinutes(30L)));
+        taskManager.createNewTask(new Task("Задача 1", "Задача 1", TaskState.DONE, LocalDateTime.parse("01.01.2027 11:00", dateTimeFormatter), Duration.ofMinutes(30L)));
         HttpClient client = HttpClient.newHttpClient();
-        URI url = URI.create(URL + "/0");
+        URI url = URI.create(URL + "/1");
         HttpRequest request = HttpRequest.newBuilder().uri(url).DELETE().build();
         List<Task> tasksFromManager = taskManager.getAllTasks();
         assertEquals(2, tasksFromManager.size(), "Некорректное количество задач");
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         assertEquals(200, response.statusCode(), "Статусы ответа не совпадает");
-        assertEquals(1, tasksFromManager.size(), "Некорректное количество задач");
+        List<Task> tasksAfterDeleteFromManager = taskManager.getAllTasks();
+        assertEquals(1, tasksAfterDeleteFromManager.size(), "Некорректное количество задач");
     }
 }

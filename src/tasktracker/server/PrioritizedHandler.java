@@ -13,7 +13,7 @@ public class PrioritizedHandler extends BaseHttpHandler {
     }
 
     @Override
-    public void handle(HttpExchange exchange) throws IOException {
+    public void handle(HttpExchange exchange) {
         try {
             String requestMethod = exchange.getRequestMethod();
 
@@ -27,7 +27,8 @@ public class PrioritizedHandler extends BaseHttpHandler {
         }
     }
 
-    private void handleGet(HttpExchange httpExchange) throws IOException {
+    @Override
+    public void handleGet(HttpExchange httpExchange) throws IOException {
         try {
             String prioritized = gson.toJson(taskManager.getPrioritizedTasks());
             sendSuccess(httpExchange, prioritized);

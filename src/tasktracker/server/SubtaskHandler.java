@@ -20,33 +20,7 @@ public class SubtaskHandler extends BaseHttpHandler {
     }
 
     @Override
-    public void handle(HttpExchange exchange) throws IOException {
-        try {
-            String requestMethod = exchange.getRequestMethod();
-
-            switch (requestMethod) {
-                case "GET": {
-                    handleGet(exchange);
-                    break;
-                }
-                case "POST": {
-                    handlePost(exchange);
-                    break;
-                }
-                case "DELETE": {
-                    handleDelete(exchange);
-                    break;
-                }
-                default: {
-                    sendNotFound(exchange, "Такого эндпоинта не существует");
-                }
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private void handleGet(HttpExchange httpExchange) throws IOException {
+    public void handleGet(HttpExchange httpExchange) throws IOException {
         String[] pathParts = httpExchange.getRequestURI().getPath().split("/");
         if (pathParts[1].equals("subtasks")) {
             try {
@@ -54,8 +28,8 @@ public class SubtaskHandler extends BaseHttpHandler {
                 if (pathParts.length == 2) {
                     response = gson.toJson(taskManager.getAllSubtasks());
                 }
-                if (pathParts.length == 4) {
-                    int taskId = Integer.parseInt(pathParts[3]);
+                if (pathParts.length == 3) {
+                    int taskId = Integer.parseInt(pathParts[2]);
                     response = gson.toJson(taskManager.getSubtaskById(taskId));
                 }
                 sendSuccess(httpExchange, response);
@@ -65,7 +39,8 @@ public class SubtaskHandler extends BaseHttpHandler {
         }
     }
 
-    private void handlePost(HttpExchange httpExchange) throws IOException {
+    @Override
+    public void handlePost(HttpExchange httpExchange) throws IOException {
         String[] pathParts = httpExchange.getRequestURI().getPath().split("/");
         if (pathParts[1].equals("subtasks")) {
             try {
@@ -76,8 +51,8 @@ public class SubtaskHandler extends BaseHttpHandler {
                     taskManager.createNewSubtask(subtaskObject);
                     sendSuccessUpdate(httpExchange, "Создана новая подзадача");
                 }
-                if (pathParts.length == 4) {
-                    int taskId = Integer.parseInt(pathParts[3]);
+                if (pathParts.length == 3) {
+                    int taskId = Integer.parseInt(pathParts[2]);
                     if (taskId != -1) {
                         taskManager.updateSubtask(subtaskObject);
                         sendSuccessUpdate(httpExchange, "Подзадача успешно обновлена");
@@ -91,7 +66,8 @@ public class SubtaskHandler extends BaseHttpHandler {
         }
     }
 
-    private void handleDelete(HttpExchange httpExchange) throws IOException {
+    @Override
+    public void handleDelete(HttpExchange httpExchange) throws IOException {
         String[] pathParts = httpExchange.getRequestURI().getPath().split("/");
         if (pathParts[1].equals("subtasks")) {
             try {
@@ -99,8 +75,8 @@ public class SubtaskHandler extends BaseHttpHandler {
                     taskManager.removeAllSubtasks();
                     sendSuccess(httpExchange, "Все подзадачи удалены");
                 }
-                if (pathParts.length == 4) {
-                    int taskId = Integer.parseInt(pathParts[3]);
+                if (pathParts.length == 3) {
+                    int taskId = Integer.parseInt(pathParts[2]);
                     taskManager.removeSubtask(taskId);
                     sendSuccess(httpExchange, "Подзадача удалена");
                 }

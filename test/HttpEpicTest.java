@@ -15,6 +15,8 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -45,10 +47,16 @@ class HttpEpicTest {
     @Test
     public void shouldBeGetAllEpics() throws IOException, InterruptedException, NotFoundException {
         Epic epic1 = new Epic("Эпик 1", "Эпик 1, 3 подзадачи");
+        epic1.setStartTime(LocalDateTime.parse("03.01.2025 11:00", dateTimeFormatter));
+        epic1.setDuration(Duration.ofMinutes(30L));
+        epic1.setEndTime(epic1.getStartTime().plus(epic1.getDuration()));
         addedEpic1 = taskManager.createNewEpic(epic1); // id=1
         Epic epic2 = new Epic("Эпик 2", "Эпик 2, 1 подзадача");
+        epic2.setStartTime(LocalDateTime.parse("03.02.2025 11:00", dateTimeFormatter));
+        epic2.setDuration(Duration.ofMinutes(30L));
+        epic2.setEndTime(epic2.getStartTime().plus(epic2.getDuration()));
         addedEpic2 = taskManager.createNewEpic(epic2); // id=2
-         HttpClient client = HttpClient.newHttpClient();
+        HttpClient client = HttpClient.newHttpClient();
         URI url = URI.create(URL);
         HttpRequest request = HttpRequest.newBuilder().uri(url).GET().build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
@@ -62,8 +70,14 @@ class HttpEpicTest {
     @Test
     public void shouldBeGetEpicById() throws IOException, InterruptedException, NotFoundException {
         Epic epic1 = new Epic("Эпик 1", "Эпик 1, 3 подзадачи");
+        epic1.setStartTime(LocalDateTime.parse("03.01.2025 11:00", dateTimeFormatter));
+        epic1.setDuration(Duration.ofMinutes(30L));
+        epic1.setEndTime(epic1.getStartTime().plus(epic1.getDuration()));
         addedEpic1 = taskManager.createNewEpic(epic1); // id=1
         Epic epic2 = new Epic("Эпик 2", "Эпик 2, 1 подзадача");
+        epic2.setStartTime(LocalDateTime.parse("03.02.2025 11:00", dateTimeFormatter));
+        epic2.setDuration(Duration.ofMinutes(30L));
+        epic2.setEndTime(epic2.getStartTime().plus(epic2.getDuration()));
         addedEpic2 = taskManager.createNewEpic(epic2); // id=2
         HttpClient client = HttpClient.newHttpClient();
         URI url = URI.create(URL + "/2");
@@ -73,12 +87,15 @@ class HttpEpicTest {
         }.getType());
         assertEquals(200, response.statusCode(), "Статусы ответа не совпадает");
         assertNotNull(epic, "Эпики не возвращается");
-        assertEquals(taskManager.getEpicById(1), epic, "Некорректный эпик");
+        assertEquals(taskManager.getEpicById(2), epic, "Некорректный эпик");
     }
 
     @Test
     public void shouldBeEpicCreated() throws IOException, InterruptedException, NotFoundException {
         Epic epic1 = new Epic("Эпик 1", "Эпик 1, 3 подзадачи");
+        epic1.setStartTime(LocalDateTime.parse("03.01.2025 11:00", dateTimeFormatter));
+        epic1.setDuration(Duration.ofMinutes(30L));
+        epic1.setEndTime(epic1.getStartTime().plus(epic1.getDuration()));
         addedEpic1 = taskManager.createNewEpic(epic1); // id=1
         String taskJson = gson.toJson(addedEpic1);
         HttpClient client = HttpClient.newHttpClient();
@@ -95,6 +112,9 @@ class HttpEpicTest {
     @Test
     public void shouldBeEpicUpdated() throws IOException, InterruptedException, NotFoundException {
         Epic epic1 = new Epic("Эпик 1", "Эпик 1, 3 подзадачи");
+        epic1.setStartTime(LocalDateTime.parse("03.01.2025 11:00", dateTimeFormatter));
+        epic1.setDuration(Duration.ofMinutes(30L));
+        epic1.setEndTime(epic1.getStartTime().plus(epic1.getDuration()));
         addedEpic1 = taskManager.createNewEpic(epic1); // id=1
         addedEpic1.setTaskState(TaskState.DONE);
         String taskJson = gson.toJson(addedEpic1);
@@ -122,6 +142,7 @@ class HttpEpicTest {
         assertEquals(2, epicsFromManager.size(), "Некорректное количество эпиков");
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         assertEquals(200, response.statusCode(), "Статусы ответа не совпадает");
-        assertEquals(1, epicsFromManager.size(), "Некорректное количество эпиков");
+        List<Epic> epicsAfterDeleteFromManager = taskManager.getAllEpics();
+        assertEquals(1, epicsAfterDeleteFromManager.size(), "Некорректное количество эпиков");
     }
 }

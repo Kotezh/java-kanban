@@ -20,6 +20,45 @@ public abstract class BaseHttpHandler implements HttpHandler {
         this.gson = gson;
     }
 
+    @Override
+    public void handle(HttpExchange exchange) {
+        try {
+            String requestMethod = exchange.getRequestMethod();
+
+            switch (requestMethod) {
+                case "GET": {
+                    handleGet(exchange);
+                    break;
+                }
+                case "POST": {
+                    handlePost(exchange);
+                    break;
+                }
+                case "DELETE": {
+                    handleDelete(exchange);
+                    break;
+                }
+                default: {
+                    sendNotFound(exchange, "Такого эндпоинта не существует");
+                }
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void handleGet(HttpExchange httpExchange) throws IOException {
+        sendNotAllowed(httpExchange);
+    }
+
+    public void handlePost(HttpExchange httpExchange) throws IOException {
+        sendNotAllowed(httpExchange);
+    }
+
+    public void handleDelete(HttpExchange httpExchange) throws IOException {
+        sendNotAllowed(httpExchange);
+    }
+
     protected void sendText(HttpExchange h, String text, int statusCode) throws IOException {
 
         byte[] response = text.getBytes(DEFAULT_CHARSET);
@@ -45,5 +84,9 @@ public abstract class BaseHttpHandler implements HttpHandler {
 
     protected void sendHasInteractions(HttpExchange h, String text) throws IOException {
         sendText(h, text, 406);
+    }
+
+    protected void sendNotAllowed(HttpExchange h) throws IOException {
+        sendText(h, "Доступ не разрешен", 405);
     }
 }

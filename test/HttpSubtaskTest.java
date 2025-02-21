@@ -82,7 +82,7 @@ class HttpSubtaskTest {
         }.getType());
         assertEquals(200, response.statusCode(), "Статусы ответа не совпадает");
         assertNotNull(subtask, "Подзадача не возвращается");
-        assertEquals(taskManager.getTaskById(3), subtask, "Некорректная подзадача");
+        assertEquals(taskManager.getSubtaskById(3), subtask, "Некорректная подзадача");
     }
 
     @Test
@@ -158,6 +158,7 @@ class HttpSubtaskTest {
         assertEquals(3, subtasksFromManager.size(), "Некорректное количество задач");
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         assertEquals(200, response.statusCode(), "Статусы ответа не совпадает");
-        assertEquals(2, subtasksFromManager.size(), "Некорректное количество задач");
+        List<Subtask> subtasksAfterFromManager = taskManager.getAllSubtasks();
+        assertEquals(2, subtasksAfterFromManager.size(), "Некорректное количество задач");
     }
 }
