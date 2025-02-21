@@ -177,7 +177,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Task updateTask(Task task) throws DateTimeException{
+    public Task updateTask(Task task) throws DateTimeException {
         checkCrossedTime(task, "На это время уже запланирована другая задача");
         int id = task.getId();
         if (tasks.containsKey(id)) {
