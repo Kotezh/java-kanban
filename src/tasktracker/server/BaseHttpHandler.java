@@ -28,6 +28,7 @@ public abstract class BaseHttpHandler implements HttpHandler {
                 .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
                 .create();
     }
+
     public BaseHttpHandler(TaskManager taskManager) {
         this.taskManager = taskManager;
         this.gson = BaseHttpHandler.getGson();
