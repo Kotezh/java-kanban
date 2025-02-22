@@ -1,6 +1,5 @@
 package tasktracker.server;
 
-import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import tasktracker.exceptions.NotFoundException;
 import tasktracker.service.TaskManager;
@@ -8,8 +7,8 @@ import tasktracker.service.TaskManager;
 import java.io.IOException;
 
 public class HistoryHandler extends BaseHttpHandler {
-    public HistoryHandler(TaskManager taskManager, Gson gson) {
-        super(taskManager, gson);
+    public HistoryHandler(TaskManager taskManager) {
+        super(taskManager);
     }
 
     @Override

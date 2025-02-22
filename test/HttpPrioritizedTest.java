@@ -7,7 +7,8 @@ import tasktracker.model.Epic;
 import tasktracker.model.Subtask;
 import tasktracker.model.Task;
 import tasktracker.model.TaskState;
-import tasktracker.server.TaskTypeToken;
+import tasktracker.server.BaseHttpHandler;
+import tokens.TaskTypeToken;
 import tasktracker.service.Managers;
 import tasktracker.service.TaskManager;
 
@@ -27,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class HttpPrioritizedTest {
     TaskManager taskManager;
     HttpTaskServer httpTaskServer;
-    Gson gson = HttpTaskServer.getGson();
+    Gson gson = BaseHttpHandler.getGson();
     private static final String URL = "http://localhost:8080/prioritized";
     public static DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
     protected Task addedTask1;

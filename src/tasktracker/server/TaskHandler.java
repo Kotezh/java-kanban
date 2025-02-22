@@ -1,6 +1,5 @@
 package tasktracker.server;
 
-import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import tasktracker.exceptions.DateTimeException;
 import tasktracker.exceptions.NotFoundException;
@@ -9,14 +8,10 @@ import tasktracker.service.TaskManager;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 
 public class TaskHandler extends BaseHttpHandler {
-    private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
-
-    public TaskHandler(TaskManager taskManager, Gson gson) {
-        super(taskManager, gson);
+    public TaskHandler(TaskManager taskManager) {
+        super(taskManager);
     }
 
     @Override

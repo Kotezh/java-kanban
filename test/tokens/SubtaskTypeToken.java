@@ -1,4 +1,4 @@
-package tasktracker.server;
+package tokens;
 
 import com.google.gson.reflect.TypeToken;
 import tasktracker.model.Subtask;

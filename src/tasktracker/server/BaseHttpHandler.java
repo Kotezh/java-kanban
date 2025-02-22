@@ -1,23 +1,36 @@
 package tasktracker.server;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import tasktracker.adapters.DurationAdapter;
+import tasktracker.adapters.LocalDateTimeAdapter;
 import tasktracker.service.TaskManager;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 public abstract class BaseHttpHandler implements HttpHandler {
-    private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
+    protected static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
     protected TaskManager taskManager;
     protected Gson gson;
 
-    public BaseHttpHandler(TaskManager taskManager, Gson gson) {
+    public static Gson getGson() {
+        return new GsonBuilder()
+                .serializeNulls()
+                .setPrettyPrinting()
+                .registerTypeAdapter(Duration.class, new DurationAdapter())
+                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
+                .create();
+    }
+    public BaseHttpHandler(TaskManager taskManager) {
         this.taskManager = taskManager;
-        this.gson = gson;
+        this.gson = BaseHttpHandler.getGson();
     }
 
     @Override

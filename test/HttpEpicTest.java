@@ -6,7 +6,8 @@ import org.junit.jupiter.api.Test;
 import tasktracker.exceptions.NotFoundException;
 import tasktracker.model.Epic;
 import tasktracker.model.TaskState;
-import tasktracker.server.EpicTypeToken;
+import tasktracker.server.BaseHttpHandler;
+import tokens.EpicTypeToken;
 import tasktracker.service.Managers;
 import tasktracker.service.TaskManager;
 
@@ -26,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class HttpEpicTest {
     TaskManager taskManager;
     HttpTaskServer httpTaskServer;
-    Gson gson = HttpTaskServer.getGson();
+    Gson gson = BaseHttpHandler.getGson();
     private static final String URL = "http://localhost:8080/epics";
     public static DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
     protected Epic addedEpic1;

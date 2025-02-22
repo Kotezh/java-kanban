@@ -6,7 +6,8 @@ import org.junit.jupiter.api.Test;
 import tasktracker.exceptions.NotFoundException;
 import tasktracker.model.Task;
 import tasktracker.model.TaskState;
-import tasktracker.server.TaskTypeToken;
+import tasktracker.server.BaseHttpHandler;
+import tokens.TaskTypeToken;
 import tasktracker.service.Managers;
 import tasktracker.service.TaskManager;
 
@@ -25,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class HttpTaskTest {
     TaskManager taskManager;
     HttpTaskServer httpTaskServer;
-    Gson gson = HttpTaskServer.getGson();
+    Gson gson = BaseHttpHandler.getGson();
     private static final String URL = "http://localhost:8080/tasks";
     public static DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
 

@@ -7,7 +7,8 @@ import tasktracker.exceptions.NotFoundException;
 import tasktracker.model.Epic;
 import tasktracker.model.Subtask;
 import tasktracker.model.TaskState;
-import tasktracker.server.SubtaskTypeToken;
+import tasktracker.server.BaseHttpHandler;
+import tokens.SubtaskTypeToken;
 import tasktracker.service.Managers;
 import tasktracker.service.TaskManager;
 
@@ -27,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class HttpSubtaskTest {
     TaskManager taskManager;
     HttpTaskServer httpTaskServer;
-    Gson gson = HttpTaskServer.getGson();
+    Gson gson = BaseHttpHandler.getGson();
     private static final String URL = "http://localhost:8080/subtasks";
     public static DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
     protected Epic addedEpic1;
