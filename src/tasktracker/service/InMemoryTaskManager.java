@@ -177,7 +177,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Task updateTask(Task task) {
+    public Task updateTask(Task task) throws DateTimeException {
         checkCrossedTime(task, "На это время уже запланирована другая задача");
         int id = task.getId();
         if (tasks.containsKey(id)) {
@@ -189,7 +189,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Subtask updateSubtask(Subtask subtask) {
+    public Subtask updateSubtask(Subtask subtask) throws DateTimeException {
         checkCrossedTime(subtask, "На это время уже запланирована другая подзадача");
         int subtaskId = subtask.getId();
         if (subtasks.containsKey(subtaskId)) {
